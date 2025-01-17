@@ -1,0 +1,213 @@
+<% layout("/layouts/boilerplate") %>
+<%= success %>
+<style>
+    /* Change button background color to red */
+    .custom-red-button {
+    background-color: red; /* Set background color to red */
+    color: white; /* Change text color to white for better contrast */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+  }
+
+  /* Change background color to blue on hover */
+  .custom-red-button:hover {
+    background-color: blue; /* Change background color to blue on hover */
+  }
+
+  /* Center the placeholder text */
+  .search-input {
+    text-align: center; /* Center the text inside the input */
+  }
+
+  /* CSS for aligning the search form to the left */
+  .left-align {
+    display: flex;
+    justify-content: flex-start; /* Keeps content on the left */
+  }
+
+  /* Additional padding or margins if needed to adjust left positioning */
+  .search-container {
+    padding-left: 10rem; /* Adjust padding to position further from the edge */
+  }
+
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter {
+    text-align: center;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    opacity: 0.7;
+  }
+  .filter:hover {
+    opacity: 1; /* Fixed opacity to a maximum of 1 */
+    cursor: pointer;
+    color: blue;
+  } 
+  .filter p {
+    font-size: 0.8rem;
+  }
+  .tax_info {
+    display: none;
+  }
+  .tax-toggle {
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    margin-left: 2rem;
+    align-items: center;
+    display: flex;
+    padding: 5px 25px;
+  }
+ /* Default search container and button size */
+ .search-container {
+    width: 50%; /* Adjust the container width for larger screens */
+  }
+  
+  .search-button {
+    width: auto; /* Default button width */
+    padding: 10px 20px; /* Default padding for button */
+    font-size: 1rem; /* Default font size */
+  }
+  
+
+@media (max-width: 480px) {
+  .search-container {
+    width: 90%; /* Make container more flexible on small screens */
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column; /* Stack input and button vertically */
+  }
+  .search-input {
+    width: 100%; /* Make input take full width */
+    margin-bottom: 10px; /* Add space between input and button */
+  }
+  .search-button {
+    width: 25%; /* Make button take full width */
+    padding: 10px; /* Increase padding for better touch targets */
+    font-size: 0.8rem;
+    height: 40px; /* Adjust font size for readability */
+  }
+}
+
+@media (max-width: 420px) {
+  .search-container {
+    width: 90%; /* Further decrease the container width */
+    padding-left: 1.5rem;
+  }
+  .search-input {
+    width: 100%; /* Input takes full width */
+  }
+  .search-button {
+    width: 30%; /* Button takes full width */
+    padding: 12px;
+    font-size: 0.8rem; /* Slightly increase font size */
+  }
+}
+
+@media (max-width: 375px) {
+  .search-container {
+    width: 80%; /* Further reduce the container width for very small screens */
+    padding-left: 0.5rem;
+  }
+  .search-input {
+    width: 80%;
+  }
+  .search-button {
+    width: 25%; /* Button takes full width */
+    padding: 11px;
+    font-size: 0.8rem; /* Increase font size for smaller screens */
+  }
+}
+
+@media (max-width: 320px) {
+  .search-container {
+    width:80%; /* Maximize container size for very narrow screens */
+    padding-left: 0.5rem;
+  }
+  .search-input {
+    width: 80%;
+  }
+  .search-button {
+    width: 37%; /* Button takes full width */
+    padding: 8px; /* Increase padding for better touch targets */
+    font-size: 0.8rem; /* Increase font size for better readability */
+  }
+}
+</style>
+
+<div id="filters">
+  <!-- Filter buttons for categories -->
+  <div class="filter" onclick="filterListings('Beach')">
+    <div><i class="fa-solid fa-umbrella-beach"></i></div>
+    <p>Beach</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('Mountain')">
+    <div><i class="fa-solid fa-mountain"></i></div>
+    <p>Mountain</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('City')">
+    <div><i class="fa-solid fa-city"></i></div>
+    <p>City</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('Snow')">
+    <div><i class="fa-solid fa-snowman"></i></div>
+    <p>Snow</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('Forest')">
+    <div><i class="fa-solid fa-tree"></i></div>
+    <p>Forest</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('Desert')">
+    <div><i class="fa-solid fa-mountain-sun"></i></div>
+    <p>Desert</p> 
+  </div> 
+  <div class="filter" onclick="filterListings('Historical')">
+    <div><i class="fa-brands fa-fort-awesome"></i></div>
+    <p>Historical</p> 
+  </div>
+
+  <!-- Left-aligned search form with increased width -->
+  <div class="search-container left-align">
+    <form class="d-flex" role="search" action="/listings" method="GET">
+      <input class="form-control me-2 search-input" type="search" name="search" placeholder="Travel Is My Therapy" aria-label="Search" style="width: 450px;">
+      <button class="btn custom-red-button search-button" type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for(let listing of allListings) { %>
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+      <div class="card col listing-card">
+        <img src="<%= listing.image.url %>"
+             class="card-img-top" 
+             alt="listing_image"
+             style="height: 20rem" />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= listing.title %></b> <br/>
+            <i>Category: <%= listing.category %></i> <br/>
+            &#8377; <%= listing.price %>/ night
+            <i class="tax_info"> &nbsp; &nbsp; +18% GST</i>
+          </p> 
+        </div>
+      </div>
+    </a>
+  <% } %>
+</div>
+
+<script>
+  function filterListings(category) {
+    window.location.href = `/listings?category=${encodeURIComponent(category)}`;
+  }
+
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  taxSwitch.addEventListener("click", () => {
+    let taxInfo = document.getElementsByClassName("tax_info");
+    for (let info of taxInfo) {
+      info.style.display = info.style.display !== "inline" ? "inline" : "none";
+    }
+  });
+</script>

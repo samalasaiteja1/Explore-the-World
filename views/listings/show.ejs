@@ -1,0 +1,239 @@
+<% layout("/layouts/boilerplate") -%>  
+<style>
+
+  /* For screens with max-width 768px */
+  @media (max-width: 768px) {
+    .col-6 {
+      width: 100%;
+    }
+    .offset-1 {
+      margin-left: 0;
+    }
+    .show-card {
+      margin-top: 1rem;
+    }
+    .db,
+    .ds {
+      margin-top: 1rem;
+    }
+    #map {
+      height: 200px;
+      width: 100%;
+    }
+    .review-card {
+      width: 95%;
+      margin-bottom: 1rem;
+    }
+
+    /* Edit button size adjustment for smaller screens */
+    .btn {
+      width: 150px;
+      height: 45px;
+      font-size: 1rem;
+
+    }
+  }
+
+  /* For screens with max-width 576px */
+  @media (max-width: 576px) {
+    #map {
+      height: 150px;
+    }
+
+    /* Edit button size adjustment */
+    .btn {
+      width: 130px;
+      height: 40px;
+      font-size: 0.9rem;
+    }
+  }
+
+  /* For screens with max-width 480px */
+  @media (max-width: 480px) {
+    .col-6.offset-2 {
+      width: 100%;
+      margin-left: 0;
+    }
+    .col-6.offset-1 {
+      width: 100%;
+      margin-left: 0;
+    }
+    .show-card {
+      margin-top: 1rem;
+    }
+
+    /* Edit button size adjustment */
+    .btn {
+      width: 120px;
+      height: 35px;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+  }
+
+  /* For screens with max-width 420px */
+  @media (max-width: 420px) {
+    .col-6 {
+      width: 100%;
+    }
+    .show-card {
+      margin-top: 1rem;
+    }
+    .db,
+    .ds {
+      margin-top: 1rem;
+    }
+    #map {
+      height: 180px;
+      width: 100%;
+      
+    }
+
+    /* Edit button size adjustment */
+    .btn {
+      width: 110px;
+      height: 30px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+  }
+
+  /* For screens with max-width 375px */
+  @media (max-width: 375px) {
+    .col-6 {
+      width: 100%;
+    }
+    .show-card {
+      margin-top: 1rem;
+    }
+    .db,
+    .ds {
+      margin-top: 1rem;
+    }
+    #map {
+      height: 160px;
+    }
+
+    /* Edit button size adjustment */
+    .btn {
+      width: 100px;
+      height: 30px;
+      font-size: 0.75rem;
+      padding: 1px 8px;
+    }
+  }
+
+  .review-card {
+    padding: 15px;
+  }
+
+  .listing-card {
+    margin-bottom: 1rem;
+  }
+
+  .btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+</style>
+
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const listing = <%- JSON.stringify(listing) %>;
+</script>
+<div class="row tm mt-3">
+  <div class="col-6 offset-2">
+    <h3><%= listing.title %></h3>
+  </div>
+
+  <div class="card col-6 offset-1 show-card listing-card">
+    <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
+    <div class="card-body">
+      <p class="card-text">Owned by: <i><%= listing.owner.username %></i></p>
+      <p class="card-text"><%= listing.description %></p>
+      <p class="card-text">&#8377; <%= listing.price %></p>
+      <p class="card-text"><%= listing.location %></p>
+      <p class="card-text"><%= listing.country %></p>
+    </div>
+  </div>
+
+  <% if (currUser && listing.owner._id.equals(currUser._id)) { %>
+    <div class="btns">
+      <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark db col-1.5">Edit</a>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+        <button class="btn btn-dark col-1.5 offset-2 ds">Delete</button>
+      </form>
+    </div>
+  <% } %>
+
+  <div class="col-6 offset-1 mb-4">
+    <% if (currUser) { %>
+      <hr/>
+      <h4>Leave a Review</h4>
+      <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+        <div class="mb-3 mt-3">
+          <label for="rating" class="form-label">Rating</label>
+          <fieldset class="starability-slot">
+            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+            <label for="first-rate1" title="Terrible">1 star</label>
+            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+            <label for="first-rate2" title="Not good">2 stars</label>
+            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+            <label for="first-rate3" title="Average">3 stars</label>
+            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+            <label for="first-rate4" title="Very good">4 stars</label>
+            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+            <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
+        </div>
+        <div class="mb-3 mt-3">
+          <label for="comment" class="form-label">Comments</label>
+          <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+          <div class="invalid-feedback">Please add some comments for review</div>
+        </div>
+        <button class="btn btn-outline-dark">Submit</button>
+      </form>
+    <% } %>
+    <hr/>
+    <% if (listing.reviews.length > 0) { %>
+      <div class="row">
+        <p><b>All Reviews</b></p>
+        <% for (let review of listing.reviews) { %>
+          <div class="col-12 review-card ms-3 mb-1">
+            <div class="card-body">
+              <h5 class="card-title">@<%= review.author.username %></h5>
+              <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+              <p class="card-text"><%= review.comment %></p>
+              <% if (currUser && review.author._id.equals(currUser._id)) { %>
+                <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                  <button class="btn btn-sm btn-dark">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6 offset-1 mb-4">
+        <h3>Where you'll be</h3>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/map.js"></script>

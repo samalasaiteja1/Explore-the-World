@@ -1,0 +1,60 @@
+<style>
+  .nav-item a {
+      background-color: #ffffff; /* Set background color to white */
+      color: #000; /* Change text color to black for contrast */
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      text-decoration: none; /* Remove underline */
+  }
+
+  .nav-item a:hover {
+      background-color: #f0f0f0; /* Optional: add a hover effect */
+  }
+
+  .navbar-brand {
+      margin: 0 auto; /* Center the brand */
+      text-align: center; /* Center text alignment */
+      font-size: 1.5rem; /* Increase font size if desired */
+      font-weight: bold; /* Make the brand name bold */
+  }
+</style>
+
+<nav class="navbar navbar-expand-md bg-color-light border-bottom sticky-top bg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/listings">
+            <i class="fa-solid fa-compass"></i> Wanderlust
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings">Explore</a>
+                </li>
+            </ul>
+            <% if(currUser !== 'undefined') { %>
+            <ul class="navbar-nav ms-auto">
+                <% if(!currUser) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings/new">Airbnb your home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">&nbsp;&nbsp;&nbsp;&nbsp;SignUp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">&nbsp;Log in</a>
+                </li>
+                <% } else { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings/new">Airbnb your home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Log out</a>
+                </li>
+                <% } %>
+            </ul>
+            <% } %>
+        </div>
+    </div>
+</nav>
